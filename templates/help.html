@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %} · Help{% endblock %}
+
+{% block content %}
+<div class="help-page">
+    <header class="page-header">
+        <h1 class="page-title">Pusat Bantuan Readora</h1>
+        <p class="page-subtitle">Butuh panduan atau punya pertanyaan seputar Readora? Cari tahu jawabannya di bawah ini.</p>
+    </header>
+
+    <!-- Tab Buttons -->
+    <div class="help-tabs-container">
+        <button class="help-tab-btn active" data-tab="howtouse">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            <span>How To Use</span>
+        </button>
+        <button class="help-tab-btn" data-tab="faq">
+            <span class="material-symbols-outlined">forum</span>
+            <span>FAQ</span>
+        </button>
+    </div>
+
+    <!-- Help Layout -->
+    <div class="help-layout">
+        <!-- Main Content Area -->
+        <div class="help-main-content">
+            
+            <!-- How To Use Content Pane -->
+            <div class="help-tab-pane active" id="pane-howtouse">
+                <ol class="guide-steps-list">
+                    <li class="guide-step-item">
+                        <div class="step-badge">1</div>
+                        <div class="step-details">
+                            <h3>Masuk / Login</h3>
+                            <p>Masuk ke akun Readora Anda terlebih dahulu menggunakan username dan password.</p>
+                        </div>
+                    </li>
+                    
+                    <li class="guide-step-item">
+                        <div class="step-badge">2</div>
+                        <div class="step-details">
+                            <h3>Pilih Mood Harianmu</h3>
+                            <p>Setelah login, kamu akan ditanya <strong>"What's your mood today??"</strong>. Pilih mood yang mewakili perasaanmu hari ini.</p>
+                        </div>
+                    </li>
+
+                    <li class="guide-step-item">
+                        <div class="step-badge">3</div>
+                        <div class="step-details">
+                            <h3>Dapatkan Feed Buku</h3>
+                            <p>Sistem akan secara otomatis menyajikan maksimal 2 rekomendasi buku terbaik untuk setiap genre (Romance, Fantasy, Mystery, dll) yang cocok dengan mood pilihanmu.</p>
+                        </div>
+                    </li>
+
+                    <li class="guide-step-item">
+                        <div class="step-badge">4</div>
+                        <div class="step-details">
+                            <h3>Ingin Pencarian Lain? (Search Halaman Kustom)</h3>
+                            <p>Mood harian ini hanya ditanyakan sekali sehari. Jika kamu ingin mencari buku dengan kombinasi mood/genre lain secara bebas, klik halaman <strong>Search</strong> di navigasi atas.</p>
+                        </div>
+                    </li>
+
+                    <li class="guide-step-item">
+                        <div class="step-badge">5</div>
+                        <div class="step-details">
+                            <h3>Buka Detail Buku</h3>
+                            <p>Bila ada buku yang menarik perhatianmu, klik <strong>"Lihat Detail"</strong> untuk membaca sinopsis lengkap, tahun terbit, nama penulis, dan jumlah halaman.</p>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- FAQ Content Pane -->
+            <div class="help-tab-pane" id="pane-faq">
+                <div class="faq-list-container">
+                    <details class="faq-accordion-item" open>
+                        <summary class="faq-trigger">
+                            <span class="faq-question">Apa itu Readora?</span>
+                            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+                        </summary>
+                        <div class="faq-content">
+                            <p>Readora adalah aplikasi pintar yang membantu kamu menemukan buku berdasarkan kecocokan genre dan suasana hati (mood), bukan cuma berdasarkan judul atau penulis yang sudah terkenal.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-accordion-item">
+                        <summary class="faq-trigger">
+                            <span class="faq-question">Kenapa mood harian hanya ditanyakan sekali sehari?</span>
+                            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+                        </summary>
+                        <div class="faq-content">
+                            <p>Kami ingin memberikan fokus suasana membaca harian yang konsisten bagi Anda. Namun, jika Anda berubah pikiran atau ingin mencari kombinasi lain, Anda selalu bisa menggunakan menu <strong>Search</strong> di bagian navigasi atas.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-accordion-item">
+                        <summary class="faq-trigger">
+                            <span class="faq-question">Bagaimana cara kerja pencocokan mood?</span>
+                            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+                        </summary>
+                        <div class="faq-content">
+                            <p>Readora menggunakan algoritma pemrosesan bahasa alami (TF-IDF Vectorization &amp; Cosine Similarity) untuk menganalisis dan membandingkan kecocokan teks antara input mood Anda dengan data Mood Utama dan Mood Pendukung dari setiap buku di koleksi kami.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-accordion-item">
+                        <summary class="faq-trigger">
+                            <span class="faq-question">Kenapa rekomendasi buku per genre di dashboard saya kosong?</span>
+                            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+                        </summary>
+                        <div class="faq-content">
+                            <p>Hal ini terjadi jika dalam database kami belum terdapat buku pada genre tersebut yang memiliki keterkaitan erat dengan mood yang Anda pilih hari ini. Anda bisa menemukan rekomendasi di genre lain yang tampil di dashboard, atau mencoba mencari kombinasi genre-mood lainnya di halaman Search.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-accordion-item">
+                        <summary class="faq-trigger">
+                            <span class="faq-question">Bagaimana cara logout atau melihat kembali mood hari ini?</span>
+                            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+                        </summary>
+                        <div class="faq-content">
+                            <p>Jika sudah login, klik avatar bulat berinisial namamu di pojok kanan atas navigasi header. Sebuah dropdown popup kecil akan muncul menampilkan mood-mu hari ini dan tombol <strong>Keluar (Logout)</strong>.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sidebar Illustration -->
+        <aside class="help-sidebar-card">
+            <div class="sidebar-art">
+                <span class="art-sparkle">✦</span>
+                <span class="material-symbols-outlined art-icon">auto_stories</span>
+                <span class="art-sparkle-large">✧</span>
+            </div>
+            <h3 class="sidebar-card-title">Membaca Sesuai Jiwa</h3>
+            <p class="sidebar-card-desc">
+                Studi menunjukkan bahwa membaca buku yang sesuai dengan kondisi emosional kita dapat meningkatkan pemahaman cerita dan memberikan efek terapi emosi (bibliotherapy) yang lebih mendalam.
+            </p>
+            <div class="sidebar-badge-cozy">Cozy Library ☕</div>
+        </aside>
+    </div>
+</div>
+
+<script>
+    // Help Tab Switching Logic
+    const tabButtons = document.querySelectorAll('.help-tab-btn');
+    const tabPanes = document.querySelectorAll('.help-tab-pane');
+
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active class from all buttons and panes
+            tabButtons.forEach(b => b.classList.remove('active'));
+            tabPanes.forEach(p => p.classList.remove('active'));
+
+            // Add active class to current button
+            btn.classList.add('active');
+
+            // Add active class to matching pane
+            const targetTab = btn.getAttribute('data-tab');
+            const targetPane = document.getElementById('pane-' + targetTab);
+            if (targetPane) {
+                targetPane.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}
