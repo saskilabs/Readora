@@ -736,6 +736,12 @@ select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
     .landing-title { font-size: 36px; }
     .landing-features { grid-template-columns: 1fr; gap: 20px; } }
 
+@media (max-width: 600px) { .landing-actions{ flex-direction: column;
+        width: 100%; gap: 14px; align-items: center; }
+    .landing-cta-btn, .landing-secondary-btn{ width: 100%;
+        max-width: 280px; justify-content: center;
+        text-align: center; } }
+
 /* 6. SELECT MOOD STYLES */
 .select-mood-page { max-width: 1000px; margin: 0 auto;
     padding: 20px 0; display: flex;
@@ -1015,7 +1021,7 @@ select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .rating-history-list::-webkit-scrollbar { width: 6px; }
 .rating-history-list::-webkit-scrollbar-thumb { background-color: #7a5c3e; border-radius: 3px; }
 .rating-history-list::-webkit-scrollbar-track { background: transparent; }
-.profile-history-title { font-size: 12px; font-weight: 700; color: var(--ink-soft); 
+.profile-history-scroll { font-size: 12px; font-weight: 700; color: var(--ink-soft); 
     text-transform: uppercase; margin-bottom: 4px; }
 
 .profile-dropdown-menu.active { pointer-events: auto;

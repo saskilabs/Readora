@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+import os
 import pandas as pd
 from datetime import datetime, date
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -9,9 +10,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.secret_key = "readora_cozy_secret_key_123"
 
-# Database Configuration (MySQL Workbench)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@localhost:3306/readora_db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+app.config["SQLALCHEMY_DATABASE_URI"] = \
+    "sqlite:///" + os.path.join(BASE_DIR, "readora.db")
+
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
@@ -62,6 +66,29 @@ class DailyMood(db.Model):
 with app.app_context():
     db.create_all()
 
+    # Isi database kalau masih kosong
+    if Book.query.count() == 0:
+        df = pd.read_csv("dataset/DATASETBUKUFINAL.csv")
+
+        for _, row in df.iterrows():
+            book = Book(
+                title=row["Judul"],
+                author=row["Penulis"],
+                genre=row["Genre"],
+                rating=float(str(row["Rating"]).replace(",",".")),
+                tahun_terbit=row["Tahun Terbit"],
+                halaman=row["Halaman"],
+                mood_utama=row["Mood Utama"],
+                mood_pendukung1=row["Mood Pendukung1"],
+                mood_pendukung2=row["Mood Pendukung2"],
+                cover=row["Cover"],
+                sinopsis=row["Sinopsis"]
+            )
+
+            db.session.add(book)
+
+        db.session.commit()
+    print("Jumlah buku:", Book.query.count())
 
 def recommend_books(genre_input, mood_input, top_n=5):
     # Query database SQL untuk mendapatkan buku dengan genre terkait
@@ -624,4 +651,5 @@ def logout():
     return redirect(url_for("home"))
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5002)
+    port = int(os.environ.get("PORT", 7860))
+    app.run(host="0.0.0.0", port=port)

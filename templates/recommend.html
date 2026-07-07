@@ -107,7 +107,7 @@
                     <!-- Book Cover Column -->
                     <div class="book-cover-container">
                         {% if book['Cover'] %}
-                        <img src="{{ url_for('static', filename='covers_jpg/' + book['Cover']) }}" 
+                        <img src="{{ url_for('static', filename=book['Cover']) }}" 
                              alt="Cover buku {{ book['Judul'] }}" 
                              class="book-cover"
                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
