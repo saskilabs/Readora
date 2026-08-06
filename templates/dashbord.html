@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %} · Dashboard Rekomendasi{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+    <!-- Header Dashboard -->
+    <header class="dashboard-header">
+        <div class="dashboard-header-container">
+            <div class="dashboard-user-info">
+                <span class="dashboard-badge">✦ Rekomendasi Hari Ini ✧</span>
+                <h1 class="dashboard-welcome">
+                    Hai, <span class="user-highlight">{{ session.get('user') }}</span>! 👋
+                </h1>
+                <p class="dashboard-desc">
+                    Berdasarkan mood harian yang kamu pilih, kami merekomendasikan buku-buku terbaik di bawah ini. 
+                    Ingin mencari buku dengan kombinasi genre &amp; mood kustom lainnya? 
+                    <a href="/search" class="dashboard-search-link">Pergi ke Halaman Search <span class="material-symbols-outlined inline-arrow">arrow_forward</span></a>.
+                </p>
+            </div>
+
+            <!-- Mood Indicator Card -->
+            <div class="dashboard-mood-card">
+                <span class="mood-label">Mood Kamu Hari Ini:</span>
+                <div class="mood-display">
+                    {% set emoji = '💭' %}
+                    {% if mood == 'Happy/Funny' %}{% set emoji = '😊' %}
+                    {% elif mood == 'Heartwarming' %}{% set emoji = '❤️' %}
+                    {% elif mood == 'Hopeful' %}{% set emoji = '✨' %}
+                    {% elif mood == 'Inspiring' %}{% set emoji = '🌟' %}
+                    {% elif mood == 'Reflective' %}{% set emoji = '💭' %}
+                    {% elif mood == 'Emotional' %}{% set emoji = '🥺' %}
+                    {% elif mood == 'Sad' %}{% set emoji = '😢' %}
+                    {% elif mood == 'Suspenseful' %}{% set emoji = '🫣' %}
+                    {% elif mood == 'Thrilling' %}{% set emoji = '⚡' %}
+                    {% elif mood == 'Dark' %}{% set emoji = '🖤' %}
+                    {% endif %}
+                    <span class="mood-emoji">{{ emoji }}</span>
+                    <span class="mood-name">{{ mood }}</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Books Grouped by Genre -->
+    <section class="dashboard-recommendations">
+        {% if not genres_data %}
+        <div class="empty-result-card">
+            <span class="material-symbols-outlined empty-icon">auto_stories</span>
+            <p class="empty-message">Yahhh, sepertinya belum ada koleksi buku yang cocok dengan mood terpilih untuk hari ini.</p>
+        </div>
+        {% else %}
+
+        {% for genre, books in genres_data.items() %}
+        {% set genre_emoji = '📖' %}
+        {% if genre == 'Romance' %}{% set genre_emoji = '💖' %}
+        {% elif genre == 'Mystery/Thriller' %}{% set genre_emoji = '🔍' %}
+        {% elif genre == 'Fantasy' %}{% set genre_emoji = '🔮' %}
+        {% elif genre == 'Sci-Fi' %}{% set genre_emoji = '🚀' %}
+        {% elif genre == 'Self Improvement' %}{% set genre_emoji = '🌱' %}
+        {% endif %}
+        
+        <div class="genre-group-section">
+            <div class="genre-group-header">
+                <span class="genre-group-icon">{{ genre_emoji }}</span>
+                <h2 class="genre-group-title">{{ genre }}</h2>
+                <div class="genre-group-line"></div>
+                <span class="genre-group-count">2 Buku Terpilih</span>
+            </div>
+
+            <div class="books-grid">
+                {% for book in books %}
+                <article class="book-card">
+                    <div class="book-card-inner">
+                        <!-- Book Cover Column -->
+                        <div class="book-cover-container">
+                            {% if book['Cover'] %}
+                            <img src="{{ url_for('static',  filename=book['Cover']) }}" 
+                                 alt="Cover buku {{ book['Judul'] }}" 
+                                 class="book-cover"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            {% endif %}
+                            <!-- Fallback styled cover if image is missing -->
+                            <div class="book-cover-fallback">
+                                <span class="fallback-icon">book</span>
+                                <span class="fallback-title">{{ book['Judul'] }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Book Info Column -->
+                        <div class="book-info-container">
+                            <div class="book-genre-badge">{{ book['Genre'] }}</div>
+                            <h3 class="book-title">{{ book['Judul'] }}</h3>
+                            <p class="book-author">Oleh <span>{{ book['Penulis'] }}</span></p>
+
+                            <!-- Rating Badge -->
+                            <div class="book-rating-badge">
+                                <span class="star-icon">★</span>
+                                <span class="rating-value">{{ book['Rating'] }}</span>
+                                <span class="rating-max">/5</span>
+                            </div>
+
+                            <!-- Mood Tag Pills -->
+                            <div class="book-tags-list">
+                                <span class="tag-pill primary-tag">{{ book['Mood Utama'] }}</span>
+                                {% if book['Mood Pendukung1'] and book['Mood Pendukung1'] != 'nan' %}
+                                <span class="tag-pill secondary-tag">{{ book['Mood Pendukung1'] }}</span>
+                                {% endif %}
+                                {% if book['Mood Pendukung2'] and book['Mood Pendukung2'] != 'nan' %}
+                                <span class="tag-pill secondary-tag">{{ book['Mood Pendukung2'] }}</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Collapsible Details -->
+                            <details class="book-details-accordion">
+                                <summary class="accordion-trigger">
+                                    <span class="trigger-label">Lihat Detail</span>
+                                    <span class="material-symbols-outlined trigger-arrow">expand_more</span>
+                                </summary>
+                                <div class="accordion-content">
+                                    <div class="book-details-grid">
+                                        <div class="detail-item">
+                                            <span class="material-symbols-outlined detail-icon">menu_book</span>
+                                            <div class="detail-text">
+                                                <span class="detail-label">Halaman</span>
+                                                <span class="detail-value">{{ book['Halaman'] }} Hlm</span>
+                                            </div>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="material-symbols-outlined detail-icon">calendar_today</span>
+                                            <div class="detail-text">
+                                                <span class="detail-label">Tahun Terbit</span>
+                                                <span class="detail-value">{{ book['Tahun Terbit'] }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="sinopsis-section">
+                                        <h4 class="sinopsis-title">Sinopsis Buku</h4>
+                                        <p class="sinopsis-text">{{ book['Sinopsis'] }}</p>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <div class="rating-section">
+                                <h4 class="rating-title">Bagaimana menurutmu buku ini?</h4>
+                                <form method="POST" action="{{ url_for('rate_book') }}" class="rating-form">
+                                    <input type="hidden" name="book_id" value="{{ book['ID'] }}">
+                                    <input type="hidden" name="source" value="dashboard">
+                                    <div class="star-rating-group">
+                                        {% for i in range(5, 0, -1) %}
+                                        <input type="radio" id="star{{ i }}-{{ book['ID'] }}" name="rating" value="{{ i }}" class="star-radio" required
+                                        {% if book['UserRating'] == i %}checked{% endif %}>
+                                        <label for="star{{ i }}-{{ book['ID'] }}" class="star-label">★</label>
+                                        {% endfor %}
+                                    </div>
+                                    <button type="submit" class="save-rating-btn">Simpan Rating</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

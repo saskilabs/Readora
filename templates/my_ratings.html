@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %} · Riwayat Rating{% endblock %}
+
+{% block content %}
+<div class="recommend-page">
+    <header class="hero-section">
+        <div class="hero-container" style="justify-content:center; text-align:center;">
+            <div class="hero-content" style="align-items:center;">
+                <div class="hero-accent">✦ Koleksi Kamu ✧</div>
+                <h1 class="hero-title">
+                    <span class="hero-line">Riwayat Rating Buku yang Pernah Kamu Baca</span>
+                </h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Results Section -->
+    <section class="results-section">
+        {% if message %}
+        <div class="empty-result-card">
+            <span class="material-symbols-outlined empty-icon">auto_stories</span>
+            <p class="empty-message">{{ message }}</p>
+        </div>
+        {% endif %}
+
+        {% if books %}
+        <div class="results-header">
+            <h2 class="results-title">Total {{ books|length }} Buku Sudah Kamu Rating</h2>
+        </div>
+
+        <div class="books-grid">
+            {% for book in books %}
+            <article class="book-card">
+                <div class="book-card-inner">
+                    <!-- Book Cover Column -->
+                    <div class="book-cover-container">
+                        {% if book['Cover'] %}
+                        <img src="{{ url_for('static', filename=book['Cover']) }}"
+                             alt="Cover buku {{ book['Judul'] }}"
+                             class="book-cover"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        {% endif %}
+                        <!-- Fallback styled cover if image is missing -->
+                        <div class="book-cover-fallback">
+                            <span class="fallback-icon">book</span>
+                            <span class="fallback-title">{{ book['Judul'] }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Book Info Column -->
+                    <div class="book-info-container">
+                        <div class="book-genre-badge">{{ book['Genre'] }}</div>
+                        <h3 class="book-title">{{ book['Judul'] }}</h3>
+                        <p class="book-author">Oleh <span>{{ book['Penulis'] }}</span></p>
+
+                        <!-- Rating Badge -->
+                        <div class="book-rating-badge">
+                            <span class="star-icon">★</span>
+                            <span class="rating-value">
+                                 {{ book['Rating'] if book['Rating'] and book['Rating'] != 0 else '-' }}
+                            </span>
+                            <span class="rating-max">/5</span>
+                        </div>
+
+                        <!-- Mood Tag Pills -->
+                        <div class="book-tags-list">
+                            <span class="tag-pill primary-tag">{{ book['Mood Utama'] }}</span>
+                            {% if book['Mood Pendukung1'] and book['Mood Pendukung1'] != 'nan' %}
+                            <span class="tag-pill secondary-tag">{{ book['Mood Pendukung1'] }}</span>
+                            {% endif %}
+                            {% if book['Mood Pendukung2'] and book['Mood Pendukung2'] != 'nan' %}
+                            <span class="tag-pill secondary-tag">{{ book['Mood Pendukung2'] }}</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Collapsible Details -->
+                        <details class="book-details-accordion">
+                            <summary class="accordion-trigger">
+                                <span class="trigger-label">Lihat Detail</span>
+                                <span class="material-symbols-outlined trigger-arrow">expand_more</span>
+                            </summary>
+                            <div class="accordion-content">
+                                <div class="book-details-grid">
+                                    <div class="detail-item">
+                                        <span class="material-symbols-outlined detail-icon">menu_book</span>
+                                        <div class="detail-text">
+                                            <span class="detail-label">Halaman</span>
+                                            <span class="detail-value">
+                                                {{ book['Halaman'] if book['Halaman'] else '-' }} Hlm
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="material-symbols-outlined detail-icon">calendar_today</span>
+                                        <div class="detail-text">
+                                            <span class="detail-label">Tahun Terbit</span>
+                                            <span class="detail-value">
+                                                {{ book['Tahun Terbit'] if book['Tahun Terbit'] else '-' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sinopsis-section">
+                                    <h4 class="sinopsis-title">Sinopsis Buku</h4>
+                                    <p class="sinopsis-text">{{ book['Sinopsis'] }}</p>
+                                </div>
+                            </div>
+                        </details>
+
+                        <div class="rating-section">
+
+                            <h4 class="rating-title">Rating kamu saat ini</h4>
+
+                            <form method="POST" action="{{ url_for('rate_book') }}" class="rating-form">
+
+                                <input type="hidden" name="book_id" value="{{ book['ID'] }}">
+                                <input type="hidden" name="source" value="my_ratings">
+
+                                <div class="star-rating-group">
+                                    {% for i in range(5, 0, -1) %}
+                                    <input type="radio" id="star{{ i }}-{{ book['ID'] }}" name="rating" value="{{ i }}" class="star-radio" required
+                                    {% if book['UserRating'] == i %}checked{% endif %}>
+                                    <label for="star{{ i }}-{{ book['ID'] }}" class="star-label">★</label>
+                                    {% endfor %}
+                                </div>
+
+                                <button type="submit" class="save-rating-btn">
+                                    Perbarui Rating
+                                </button>
+
+                            </form>
+                            <!-- CTA cari mirip lagi -->
+                            {% if book['UserRating'] and book['UserRating'] >= 4 %}
+                            <div class="similar-books-cta">
+                                Mau lihat rekomendasi serupa lainnya?
+                                <a href="{{ url_for('similar_books', book_id=book['ID']) }}" class="similar-cta-link">Cari yang mirip</a>
+                            </div>
+                            {% else %}
+                            <div class="similar-books-cta locked">
+                                Kasih rating 4 atau 5 dulu ke buku ini buat buka rekomendasi serupa
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %} · Login{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-container">
+        <!-- Cozy Bookish Art Panel -->
+        <div class="login-art-panel">
+            <div class="art-overlay">
+                <span class="art-sparkle sparkle-1">✦</span>
+                <span class="art-sparkle sparkle-2">✧</span>
+                <span class="material-symbols-outlined login-book-icon notranslate" translate="no">menu_book</span>
+                <h2 class="art-title">Selamat Datang</h2>
+                <p class="art-subtitle">Masuk untuk melanjutkan perjalanan menemukan buku paling cocok dengan mood kamu hari ini.</p>
+            </div>
+        </div>
+
+        <!-- Form Panel -->
+        <div class="login-form-panel">
+            <div class="login-form-header">
+                <h1 class="form-title">Masuk ke Readora</h1>
+                <p class="form-subtitle">Silakan isi detail akun Anda di bawah ini.</p>
+            </div>
+
+            {% if error %}
+            <div class="login-error-alert">
+                <span class="material-symbols-outlined error-icon notranslate" translate="no">error</span>
+                <span class="error-msg">{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <form method="POST" class="login-form">
+                <div class="input-group">
+                    <label for="email" class="input-label">Email</label>
+                    <div class="input-wrapper">
+                        <span class="material-symbols-outlined input-icon notranslate" translate="no">mail</span>
+                        <input type="text" id="email" name="email" placeholder="Masukkan Email" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password" class="input-label">Password</label>
+                    <div class="input-wrapper">
+                        <span class="material-symbols-outlined input-icon notranslate" translate="no">lock</span>
+                        <input type="password" id="password" name="password" placeholder="Masukkan Password" required autocomplete="current-password">
+                    </div>
+                </div>
+
+                <button type="submit" class="login-submit-btn">
+                    <span class="btn-text">Masuk</span>
+                    <span class="material-symbols-outlined btn-arrow notranslate" translate="no">arrow_forward</span>
+                </button>
+            </form>
+
+            <div class="login-form-footer">
+                <p>Belum punya akun? <a href="{{ url_for('register') }}" class="footer-link">Daftar Sekarang</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
